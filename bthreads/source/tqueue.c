@@ -26,7 +26,7 @@ unsigned long int tqueue_enqueue(TQueue* q, void* data) {
     TQueueNode *tmp;
     tmp=malloc(sizeof(TQueueNode));
     tmp->data=data;
-    tmp->next=NULL;
+    tmp->next=NULL; // oppure punta a front?
     if(!tqueue_is_empty(q)) {
         q->rear->next=tmp;
         q->rear=tmp;
@@ -56,7 +56,7 @@ unsigned long int tqueue_size(TQueue *q) {
     return q->count;
 }
 
-TQueue* tqueue_at_offset(TQueue *q, unsigned long int offset) {
+TQueue* tqueue_at_offset(TQueue *q, unsigned long int offset) { // passing a queue
     if(tqueue_is_empty(q))
         return NULL;
     if(offset>q->count) // if the offset is bigger than the queue dimension return NULL
@@ -79,10 +79,33 @@ TQueue* tqueue_at_offset(TQueue *q, unsigned long int offset) {
     return tmpqueue;
 }
 
+TQueueNode* tqueueNode_at_offset(TQueueNode *q, unsigned long int offset) { // passing a node
+    if(q->next==NULL)
+        return NULL;
+    TQueueNode *tmp;
+    tmp=q->next;
+    for(int i=0; i<offset-1; i++) {
+        tmp=tmp->next;
+        if(tmp==NULL) { // if the offset is bigger than the queue dimension return NULL
+            return NULL;
+        }
+    }
+    TQueueNode *tmpNode;
+    tmpNode=malloc(sizeof(TQueueNode));
+    tmpNode=tmp;
+    return tmpNode;
+}
+
 void* tqueue_get_data(TQueue *q) {
     if(q==NULL)
         return NULL;
     return q->front->data;
+}
+
+void* tqueueNode_get_data(TQueueNode *q) {
+    if(q==NULL)
+        return NULL;
+    return q->data;
 }
 
 void tqueue_print(TQueue *q) {
@@ -98,3 +121,38 @@ void tqueue_print(TQueue *q) {
         }
     }
 }
+
+void tqueue_print_node(TQueueNode *q) {
+    if(q==NULL) {
+        printf("Nodo inesistente\n");
+    } else {
+        printf(q->data);
+        printf("\n");
+    }
+}
+
+
+/*
+TQueue* tqueueNode_at_offset(TQueueNode *q, unsigned long int offset) { // passing a node
+    if(q->next==NULL)
+        return NULL;
+    TQueueNode *tmp;
+    tmp=q->next;
+    for(int i=0; i<offset-1; i++) {
+        tmp=tmp->next;
+        if(tmp==NULL) { // if the offset is bigger than the queue dimension return NULL
+            return NULL;
+        }
+    }
+    TQueue *tmpqueue;
+    tmpqueue=malloc(sizeof(TQueue));
+    tqueue_initialize(tmpqueue);
+    int cont=0;
+    while(tmp!=NULL) {
+        tqueue_enqueue(tmpqueue, tmp->data);
+        tmp=tmp->next;
+        cont++;
+    }
+    tmpqueue->count=cont;
+    return tmpqueue;
+}*/

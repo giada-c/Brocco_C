@@ -33,10 +33,17 @@ unsigned long int tqueue_size(TQueue *q);
 * NULL if the queue is empty */
 TQueue* tqueue_at_offset(TQueue *q, unsigned long int offset);
 
-/* Returns the data on the first node of the given list */
+struct TQueueNode* tqueueNode_at_offset(struct TQueueNode *q, unsigned long int offset);
+
+/* Returns the data of the first node of the given list */
 void* tqueue_get_data(TQueue *q);
+
+/* Returns the data of the given node */
+void* tqueueNode_get_data(struct TQueueNode *q);
 
 /* Print the queue */
 void tqueue_print(TQueue *q);
+
+void tqueue_print_node(struct TQueueNode *q);
 
 #endif //BTHREADS_TQUEUE_H
